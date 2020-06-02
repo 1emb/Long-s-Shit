@@ -1,0 +1,12 @@
+package MyFirstPackage;
+
+public class MyFirstClass {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		char my_char = (char)'a';
+		System.out.println(my_char);
+		
+	}
+
+}

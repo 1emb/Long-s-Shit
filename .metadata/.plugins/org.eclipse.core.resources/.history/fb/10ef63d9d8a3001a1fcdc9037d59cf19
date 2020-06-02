@@ -1,0 +1,108 @@
+package MyFirstPackage;
+
+import java.util.ArrayList;
+
+import java.io.File;  // Import the File class
+import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.FileWriter;   // Import the FileWriter class
+import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook; 
+
+
+public class ExcelReader  
+{  
+	ArrayList<String> Column = new ArrayList<String>();
+	
+	String Date;
+	String FinalPrice;
+	String Change;
+	String KL_auction;
+	String GT_auction;
+	String KL_deal;
+	String GT_deal;
+	String OpenPrice;
+	String MaxPrice;
+	String MinPrice;
+	
+	public static void output(String out) {
+		try {
+			FileWriter myWriter = new FileWriter("output.txt");
+		    myWriter.write(out);
+		    myWriter.close();
+		    System.out.println("Successfully wrote to the file.");
+		}
+		catch (IOException e){
+			System.out.println("An error occurred.");
+		    e.printStackTrace();
+			
+		}
+		
+	}
+	public static void checkOutputFile() {
+	try {
+		File myObj = new File("output.txt");
+		if (myObj.createNewFile()) {
+			System.out.println("File created: " + myObj.getName());
+	    } else {
+	        System.out.println("File already exists.");
+	    }
+	 } catch (IOException e) {
+	      System.out.println("An error occurred.");
+	      e.printStackTrace();
+	 }
+		
+	}
+	static XSSFRow row;
+	public static void main(String args[])throws Exception { 
+		int chk;
+		checkOutputFile();
+		output("bruh");
+	  File file = new File("D:\\Java Workspace\\UPCOM-INDEX.xlsx");
+	  FileInputStream fIP = new FileInputStream(file);
+	  
+	  XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+      XSSFSheet spreadsheet = workbook.getSheetAt(0);
+      Iterator < Row >  rowIterator = spreadsheet.iterator();
+      
+      while (rowIterator.hasNext()) {
+         row = (XSSFRow) rowIterator.next();
+         Iterator < Cell >  cellIterator = row.cellIterator();
+         int i = 0;
+         while ( cellIterator.hasNext()) {
+        	
+        	ArrayList<String> cellVal = new ArrayList<String>();
+            Cell cell = cellIterator.next();
+            switch (cell.getCellType()) {
+               case Cell.CELL_TYPE_NUMERIC:
+            	  if (HSSFDateUtil.isCellDateFormatted(cell)) {
+            		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+            		  System.out.print(df.format(cell.getDateCellValue()) + " \t\t ");
+            		  break;
+            	  } else {
+            		  System.out.print(cell.getNumericCellValue() + " \t\t ");
+            		  break;
+            	  }
+               
+               case Cell.CELL_TYPE_STRING:
+                  System.out.print(
+                  cell.getStringCellValue() + " \t\t ");
+                  chk = chk + 1;
+                  break;
+               case Cell.CELL_TYPE_BLANK:
+            	   
+            }
+         }
+         System.out.println();
+      }
+      fIP.close();
+	}  
+}  

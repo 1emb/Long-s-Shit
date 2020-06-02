@@ -1,0 +1,285 @@
+package MyFirstPackage;
+
+import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.File;  // Import the File class
+import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.FileWriter;   // Import the FileWriter class
+import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook; 
+
+
+public class ExcelReader  
+{  	
+	public static void output(ArrayList<String> name, ArrayList<String> out) {
+		try {
+			FileWriter myWriter = new FileWriter("output.txt", true);
+
+			System.out.print("first item when write to out: " + out.get(0)+"\n");
+			
+			//Style 1: 
+			myWriter.write("Ngày " + out.get(0) + ", ");
+			/*
+			 * for (int i = 1; i<out.size(); i++) { myWriter.write(name.get(i) + " là " +
+			 * out.get(i)); myWriter.write(out.get(i) + "  "); }
+			 */
+			myWriter.write("Giá khởi điểm là: " + out.get(7) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2) + "so với hôm trước. ");
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2) + "so với hôm trước. ");
+			}
+			myWriter.write("Giá max: " + out.get(8) + ", ");
+			myWriter.write("giá min: " + out.get(9) + ".");
+			myWriter.write("\n");
+			
+		    //Style 2: 
+			myWriter.write("Cuối ngày " + out.get(0) + ", ");
+			myWriter.write("giá max là " + out.get(8) + ", ");
+			myWriter.write("giá min là " + out.get(9) + ", ");
+			myWriter.write("giá sàn là " + out.get(7) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2) + "so với hôm qua. ");
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2) + "so với hôm trước. ");
+			}
+			myWriter.write("\n");
+			
+			//Style 3: 
+			myWriter.write("Hết ngày " + out.get(0) + ", ");
+			myWriter.write("so với hôm qua, giá sàn ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			
+			myWriter.write(" ở mức giá " + out.get(7) + ", ");
+			myWriter.write("với mức max là " + out.get(8));
+			myWriter.write(" và mức min là " + out.get(9) + ".");
+			myWriter.write("\n");
+			
+			//Style 4:
+			myWriter.write("Đóng cửa phiên giao dịch " + out.get(0) + ", ");
+			myWriter.write("với mức giá khởi điểm là " + out.get(7) + ", giá max lên đến " 
+					+ out.get(8) + " và giá min là " + out.get(9) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			myWriter.write(" so với hôm qua.");
+			myWriter.write("\n");
+			
+			//Style 5:
+			myWriter.write("Tạm dừng phiên giao dịch " + out.get(0) + ", ");
+			myWriter.write("giá khởi điểm là " + out.get(7) + ", ta có giá max là " 
+					+ out.get(8) + " và giá min là " + out.get(9) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			myWriter.write(" so với hôm trước.");
+			myWriter.write("\n");
+			
+			//Style 6:
+			myWriter.write("Tại thời điểm " + out.get(0) + ", ");
+			myWriter.write("giá khởi điểm là " + out.get(7) + ", giá max là " 
+					+ out.get(8) + " và giá min là " + out.get(9) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			myWriter.write(" so với hôm qua.");			
+			myWriter.write("\n");
+			
+			//Style 7: 
+			myWriter.write("Kết thúc ngày " + out.get(0) + ", ");
+			myWriter.write("giá sàn ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}			
+			myWriter.write(" ở mức giá " + out.get(7) + ", ");
+			myWriter.write("với mức max là " + out.get(8));
+			myWriter.write(" và mức min là " + out.get(9) + ".");			
+			myWriter.write("\n");
+			
+			//Style 8: 
+			myWriter.write("Vào ngày " + out.get(0) + ", ");
+			myWriter.write("Giá khởi điểm là: " + out.get(7) + ", ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2) + "so với hôm qua. ");
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2) + "so với hôm trước. ");
+			}
+			myWriter.write("Giá cao nhất: " + out.get(8) + ", ");
+			myWriter.write("giá thấp nhất: " + out.get(9) + ".");
+			myWriter.write("\n");	
+			
+			//Style 9: 
+			myWriter.write("so với hôm qua, ");
+			myWriter.write("giá sàn ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			myWriter.write(" ở mức " + out.get(7));
+			myWriter.write(" với mức max là " + out.get(8));
+			myWriter.write(" và mức min là " + out.get(9) + ".");			
+			myWriter.write("\n");			
+			
+			//Style 10: 
+			myWriter.write("Tính đến " + out.get(0) + ", ");
+			myWriter.write("giá sàn ");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}			
+			myWriter.write(" ở mức " + out.get(7) + ", ");
+			myWriter.write("với max là " + out.get(8));
+			myWriter.write(" và min là " + out.get(9) + ".");			
+			myWriter.write("\n");
+			
+			//Style 11: 
+			myWriter.write("so với hôm qua, ");
+			myWriter.write("giá sàn");
+
+			myWriter.write(" đạt đỉnh ở mức " + out.get(8));
+			myWriter.write(" với min là " + out.get(9) + ",");
+			if (out.get(2).indexOf("-") >=0 ) {
+				myWriter.write("tăng " + out.get(2));
+			} else if (out.get(2).indexOf("-") < 0) {
+				myWriter.write("giảm " + out.get(2));
+			}
+			myWriter.write(" ở mức " + out.get(7));
+			myWriter.write("\n");				
+			
+			//Style 12: 
+			myWriter.write("giá sàn hôm " + out.get(0) + " đạt " + out.get(7));
+			
+			
+			
+		    myWriter.close();
+		    System.out.println("Successfully wrote to the file.");
+		}
+		catch (IOException e){
+			System.out.println("An error occurred.");
+		    e.printStackTrace();
+			
+		}
+		
+	}
+	
+	public static void outputRestart() {
+		try {
+			FileWriter myWriter = new FileWriter("output.txt");
+			myWriter.write("\n");
+		    
+		    myWriter.close();
+		    System.out.println("Successfully clear output");
+		}
+		catch (IOException e){
+			System.out.println("An error occurred in output clearing.");
+		    e.printStackTrace();
+			
+		}
+	}
+	
+	public static void checkOutputFile() {
+	try {
+		File myObj = new File("output.txt");
+		if (myObj.createNewFile()) {
+			System.out.println("File created: " + myObj.getName());
+	    } else {
+	        System.out.println("File already exists.");
+	    }
+	 } catch (IOException e) {
+	      System.out.println("An error occurred.");
+	      e.printStackTrace();
+	 }
+		
+	}
+	static XSSFRow row;
+	public static void main(String args[])throws Exception { 
+		outputRestart();
+		ArrayList<String> Column = new ArrayList<String>();
+		
+		int chk = 0;
+		checkOutputFile();
+		
+	  File file = new File("D:\\Java Workspace\\UPCOM-INDEX.xlsx");
+	  FileInputStream fIP = new FileInputStream(file);
+	  
+	  XSSFWorkbook workbook = new XSSFWorkbook(fIP);
+      XSSFSheet spreadsheet = workbook.getSheetAt(0);
+      Iterator < Row >  rowIterator = spreadsheet.iterator();
+      int i = 0;
+      
+      while (rowIterator.hasNext()) {
+    	  ArrayList<String> cellVal = new ArrayList<String>(); 
+    	  
+         row = (XSSFRow) rowIterator.next();
+         Iterator < Cell >  cellIterator = row.cellIterator();
+         
+         while ( cellIterator.hasNext()) {
+            Cell cell = cellIterator.next();
+            switch (cell.getCellType()) {
+               case Cell.CELL_TYPE_NUMERIC:
+            	  if (HSSFDateUtil.isCellDateFormatted(cell)) {
+            		  DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            		  System.out.print(df.format(cell.getDateCellValue()) + " \t\t ");
+            		  cellVal.add(df.format(cell.getDateCellValue())); 		  
+            	  } 
+//            	  else {
+//            		  System.out.print(cell.getNumericCellValue() + " \t\t ");
+//            		  break;
+//            	  }
+            	  break;
+               
+               case Cell.CELL_TYPE_STRING:
+           
+                  System.out.print(cell.getStringCellValue() + " \t\t ");
+                  System.out.print("  " + String.valueOf(chk) + "  ");
+                  
+                  if (chk == 0) {
+                	  Column.add(cell.getStringCellValue());
+                	  
+                  } else {
+                	  cellVal.add(cell.getStringCellValue());
+                	  
+                  }
+                  break;
+               case Cell.CELL_TYPE_BLANK:
+                   if (chk == 0) {
+                 	  Column.add("NULL");
+                 	  
+                   } else {
+                 	  cellVal.add("NULL");     
+                   }
+            }
+         }
+         System.out.println();
+         if (chk != 0) {
+        	 output(Column, cellVal);
+         }
+         chk++;
+      }
+      
+      fIP.close();
+	}  
+}  
